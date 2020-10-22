@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import CenterFormContainer from './app/containers/CenterFormContainer';
 import MessagesApp from './app/containers/MessagesApp';
+import PrivateRoute from './app/components/AuthRoute'
 function App() {
   return (
     <Router>
@@ -26,9 +27,9 @@ function App() {
             <SignUpForm/>
           </CenterFormContainer>
         </Route>
-        <Route exact path="/">
+        <PrivateRoute exact path="/">
           <MessagesApp/>
-        </Route>
+        </PrivateRoute>
       </Switch>   
     </Router>  
 

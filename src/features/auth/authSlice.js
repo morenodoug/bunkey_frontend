@@ -2,6 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IDLE_STATUS, PENDING_STATUS, FULFILLED_STATUS,REJECTED_STATUS } from "../../app/utils/ApistatusConstants";
 import {signInService} from "../../app/utils/api"
 
+const initialState ={
+  status: IDLE_STATUS,
+  authenticated:false,
+  jsonwebtoken: null,
+  error: null
+
+}
+
+
 export const  signIn = createAsyncThunk("signIn",
  async  (signInData, thunkAPI) =>{
   
@@ -11,22 +20,25 @@ export const  signIn = createAsyncThunk("signIn",
     try {
         const response = await signInService(email, password)
         return response.data
-      } catch (err) {
-        console.log(err.response)
-        return thunkAPI.rejectWithValue (err.response)
+      } catch (error) {
+        if(error.response){
+          return thunkAPI.rejectWithValue (error.response)
+        }
+        return error
+
       }    
 
 }) 
-const initialState ={
-    status: IDLE_STATUS,
-    authorized:false,
-    jsonwebtoken: null,
-    error: null
 
-}
+export const  setAuthAfterLogin = createAsyncThunk("setAuthAfterLogin",
+  (data, thunkAPI) =>{
+  
+   return data   
+
+})
 
 export const signInSlice = createSlice({
-    name:"signIn",
+    name:"auth",
     initialState: initialState,
     reducers:{
 
@@ -43,7 +55,8 @@ export const signInSlice = createSlice({
       },
       [signIn.fulfilled] : (state, action) =>{
         state.status =FULFILLED_STATUS
-        state.jsonwebtoken = action.jsonwebtoken
+        state.jsonwebtoken = action.payload.token
+        state.authenticated = true
         state.error=null
       },
       [signIn.rejected] : (state, action) =>{
@@ -51,11 +64,14 @@ export const signInSlice = createSlice({
         state.status =REJECTED_STATUS
         state.error = action.error
         state.jsonwebtoken =  null
+        state.authenticated = false
       }
+
     }
 })
 
 export default signInSlice.reducer 
 export const { resetJsonWt}  = signInSlice.actions
 
-export  const getAuthorizedSelector = state => state.authorized
+export  const isAuthenticatedSelector = state => state.auth.authenticated
+export const isSignInRequestPendingSelector = state => state.auth.status === PENDING_STATUS
