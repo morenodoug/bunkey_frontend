@@ -11,6 +11,7 @@ import {
   Link
 } from "react-router-dom";
 import CenterFormContainer from './app/containers/CenterFormContainer';
+import MessagesApp from './app/containers/MessagesApp';
 function App() {
   return (
     <Router>
@@ -24,6 +25,9 @@ function App() {
           <CenterFormContainer>
             <SignUpForm/>
           </CenterFormContainer>
+        </Route>
+        <Route exact path="/">
+          <MessagesApp/>
         </Route>
       </Switch>   
     </Router>  
