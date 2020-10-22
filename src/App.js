@@ -25,7 +25,6 @@ function App() {
             <SignUpForm/>
           </CenterFormContainer>
         </Route>
-
       </Switch>   
     </Router>  
 
