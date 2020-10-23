@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IDLE_STATUS, PENDING_STATUS, FULFILLED_STATUS,REJECTED_STATUS } from "../../app/utils/ApistatusConstants";
-import {signInService} from "../../app/utils/api"
+import {signInService, signUpService} from "../../app/utils/api"
 
 const initialState ={
   status: IDLE_STATUS,
@@ -30,13 +30,22 @@ export const  signIn = createAsyncThunk("signIn",
 
 }) 
 
-export const  setAuthAfterLogin = createAsyncThunk("setAuthAfterLogin",
-  (data, thunkAPI) =>{
+export const  signUp = createAsyncThunk("signUp",
+ async  (signUpData, thunkAPI) =>{
   
-   return data   
+    const {name,email ,  password} = signUpData
+    try {
+        const response = await signUpService(name,email, password)
+        return response.data
+      } catch (error) {
+        if(error.response){
+          return thunkAPI.rejectWithValue (error.response)
+        }
+        return error
 
-})
+      }    
 
+}) 
 export const signInSlice = createSlice({
     name:"auth",
     initialState: initialState,
@@ -65,7 +74,25 @@ export const signInSlice = createSlice({
         state.error = action.error
         state.jsonwebtoken =  null
         state.authenticated = false
-      }
+      },
+
+
+      [signUp.pending] : (state, action) =>{
+        state.status = PENDING_STATUS
+      },
+      [signUp.fulfilled] : (state, action) =>{
+        state.status =FULFILLED_STATUS
+        state.jsonwebtoken = action.payload.token
+        state.authenticated = true
+        state.error=null
+      },
+      [signUp.rejected] : (state, action) =>{
+
+        state.status =REJECTED_STATUS
+        state.error = action.error
+        state.jsonwebtoken =  null
+        state.authenticated = false
+      }      
 
     }
 })

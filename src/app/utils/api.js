@@ -5,10 +5,14 @@ const signinPath ="auth/signin"
 const signUpPath ="auth/signup"
 
 
-const sigInUrl =`http://${host}:${port}/${signinPath}`
-const sigUpUrl =`http://${host}:${port}/${signUpPath}`
+const signInUrl =`http://${host}:${port}/${signinPath}`
+const signUpUrl =`http://${host}:${port}/${signUpPath}`
 
 
 export const signInService = (  email, password)=>{
-    return axios.post(sigInUrl, { email, password })
+    return axios.post(signInUrl, { email, password })
+}
+
+export const signUpService =(name, email ,password) =>{
+    return axios.post(signUpUrl,{name,email,password})
 }

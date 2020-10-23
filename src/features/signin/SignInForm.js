@@ -48,7 +48,7 @@ export default function SignInForm(props){
 
     const handleSignIn =(event) =>{
       dispatch(signIn({email, password}))
-   
+      .then(unwrapResult)
       .then(originalPromiseResult => {
         let { from } = location.state || { from: { pathname: "/" } };
         history.replace(from);
