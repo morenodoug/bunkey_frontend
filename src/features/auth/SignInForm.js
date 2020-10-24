@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid"
 import Button from "@material-ui/core/Button"
-import {signIn, isSignInRequestPendingSelector} from "../auth/authSlice"
+import {signIn, isSignInRequestPendingSelector} from "./authSlice"
 import { useSelector ,useDispatch} from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
 

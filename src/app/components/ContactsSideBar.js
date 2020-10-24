@@ -13,7 +13,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
-const drawerWidth = 240;
+import {drawerWidth} from "../utils/UiConstants"
+import {useSelector} from "react-redux"
+import {getUsersSelector} from "../../features/chat/chatSlice"
+import UserListItem from "./UserListItem"
+
+// const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,8 +43,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
+
 export default  function  ContactsSideBar( props ) {
     const classes = useStyles();
+    const  users = useSelector(getUsersSelector)
+
+    const  handlerUserClick = (name) =>{ alert(name) }
+
+    const userListItems = users.map(user  =>  <UserListItem key={`usercard-${user.id}`} userInfo={user}   onClickProvider ={handlerUserClick} />)
     return(
         
         <Drawer
@@ -53,22 +64,10 @@ export default  function  ContactsSideBar( props ) {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-            </ListItem>
-        ))}
+            {userListItems}
         </List>
         <Divider />
-        <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-            </ListItem>
-        ))}
-        </List>
+
     </Drawer>   
     ) 
 

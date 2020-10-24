@@ -5,10 +5,10 @@ import Typography from '@material-ui/core/Typography';
 import TextField from "@material-ui/core/TextField"
 import ContactsSideBar from "../components/ContactsSideBar"
 import { Button , Divider} from '@material-ui/core';
+import {drawerWidth} from "../utils/UiConstants"
 
 
-
-const drawerWidth = 240;
+//const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 export default function MessageApp(props){
     const classes = useStyles();
+  
     return(
     <div className={classes.root}>
 

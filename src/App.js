@@ -1,8 +1,8 @@
 import React from 'react';
 
 import './App.css';
-import SignUpForm from "./features/signup/SignUpForm" 
-import SignInForm from "./features/signin/SignInForm"
+import SignUpForm from "./features/auth/SignUpForm" 
+import SignInForm from "./features/auth/SignInForm"
 import {
   BrowserRouter as Router,
   Switch,
@@ -26,9 +26,9 @@ function App() {
             <SignUpForm/>
           </CenterFormContainer>
         </Route>
-        <PrivateRoute exact path="/">
+        <Route exact path="/">
           <MessagesApp/>
-        </PrivateRoute>
+        </Route>
         <Route path="*">
             <Redirect to="/"/>
         </Route>        
