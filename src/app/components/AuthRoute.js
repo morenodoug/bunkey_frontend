@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {isAuthenticatedSelector} from "../../features/auth/authSlice"
 import {
-  BrowserRouter as Router,
   Route,
   Redirect,
 

@@ -1,14 +1,13 @@
 import React from 'react';
 
 import './App.css';
-import Grid from "@material-ui/core/Grid"
 import SignUpForm from "./features/signup/SignUpForm" 
 import SignInForm from "./features/signin/SignInForm"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
 import CenterFormContainer from './app/containers/CenterFormContainer';
 import MessagesApp from './app/containers/MessagesApp';
@@ -30,6 +29,9 @@ function App() {
         <PrivateRoute exact path="/">
           <MessagesApp/>
         </PrivateRoute>
+        <Route path="*">
+            <Redirect to="/"/>
+        </Route>        
       </Switch>   
     </Router>  
 

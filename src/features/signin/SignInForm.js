@@ -7,13 +7,9 @@ import Button from "@material-ui/core/Button"
 import {signIn, isSignInRequestPendingSelector} from "../auth/authSlice"
 import { useSelector ,useDispatch} from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
-import {getJWT, setAuth} from "../../app/utils/AuthUtils"
 
 import {
-  BrowserRouter as Router,
-
   Link,
-  Redirect,
   useHistory,
   useLocation
 } from "react-router-dom";

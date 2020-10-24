@@ -8,10 +8,7 @@ import {signUp, isSignInRequestPendingSelector} from "../auth/authSlice"
 import { useSelector ,useDispatch} from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
 import {
-  BrowserRouter as Router,
-
   Link,
-  Redirect,
   useHistory,
   useLocation
 } from "react-router-dom";
