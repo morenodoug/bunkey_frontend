@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getUsersChatList } from "../../app/utils/api";
 import { IDLE_STATUS, PENDING_STATUS, FULFILLED_STATUS,REJECTED_STATUS } from "../../app/utils/ApistatusConstants";
-import {signInService, signUpService} from "../../app/utils/api"
 
 const users =[
   {
@@ -64,7 +64,9 @@ const users =[
   }    
 ]
 const initialState ={
-  users: users,
+  
+  users: [],
+  status: IDLE_STATUS,
   messageBox:{
     message:"",
     userId:"",
@@ -72,7 +74,18 @@ const initialState ={
   }
 
 }
+export  const getChatUserList =  createAsyncThunk("getChatUserList",  
+async (_, thunkAPI) =>{
 
+  const jwt = thunkAPI.getState().auth.jsonwebtoken
+  try{
+      const response = await getUsersChatList(jwt)
+      return response.data
+  }catch(err){
+      throw err
+  }
+  
+})
 export  const chatSlice = createSlice({
   name: "chat",
   initialState: initialState,
@@ -83,7 +96,32 @@ export  const chatSlice = createSlice({
         currentState.messageBox.message =""
         currentState.messageBox.status = IDLE_STATUS
 
-      },
+      }
+    
+  },
+  extraReducers:{
+
+
+    [getChatUserList.pending] : (state, action) =>{
+      state.status = PENDING_STATUS
+    },
+    [getChatUserList.fulfilled] : (state, action) =>{
+      state.status =FULFILLED_STATUS
+      const users = action.payload.users.map( user => {return {
+        id:user._id, 
+        email:user.email, 
+        name:user.nombre,
+        messages:[]
+      }})
+      state.users = users
+
+    },
+    [getChatUserList.rejected] : (state, action) =>{
+
+      state.status =REJECTED_STATUS
+      state.users=[]
+    },
+
   }
 })
 
