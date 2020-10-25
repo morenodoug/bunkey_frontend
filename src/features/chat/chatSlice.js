@@ -75,10 +75,19 @@ export  const chatSlice = createSlice({
   name: "chat",
   initialState: initialState,
   reducers:{
+    
+      setChatBoxUser: (currentState, action) =>{
+        currentState.messageBox.userId = action.payload
+        currentState.messageBox.message =""
+        currentState.messageBox.status = IDLE_STATUS
 
+      },
   }
 })
 
 export default chatSlice.reducer
 
+export const {setChatBoxUser} = chatSlice.actions
+
 export const getUsersSelector = (state) => state.chat.users
+export const getChatUser = state => state.chat.messageBox.userId

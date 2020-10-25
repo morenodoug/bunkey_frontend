@@ -5,18 +5,17 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
+
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+
 
 import {drawerWidth} from "../utils/UiConstants"
 import {useSelector} from "react-redux"
-import {getUsersSelector} from "../../features/chat/chatSlice"
+import {getUsersSelector, getChatUser} from "../../features/chat/chatSlice"
 import UserListItem from "./UserListItem"
+import {setChatBoxUser} from "../../features/chat/chatSlice"
+import {useDispatch} from "react-redux"
+
 
 // const drawerWidth = 300;
 
@@ -45,31 +44,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default  function  ContactsSideBar( props ) {
-    const classes = useStyles();
-    const  users = useSelector(getUsersSelector)
+  const dispatch = useDispatch()  
+  const classes = useStyles();
+  const  users = useSelector(getUsersSelector)
+  const chatUserId = useSelector(getChatUser)
 
-    const  handlerUserClick = (name) =>{ alert(name) }
+  const  handlerUserClick = (userId) =>{ dispatch(setChatBoxUser(userId)) }
 
-    const userListItems = users.map(user  =>  <UserListItem key={`usercard-${user.id}`} userInfo={user}   onClickProvider ={handlerUserClick} />)
-    return(
-        
-        <Drawer
-            className={classes.drawer}
-            variant="permanent"
-            classes={{
-            paper: classes.drawerPaper,
-            }}
-            anchor="left"
-        >
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-            {userListItems}
-        </List>
-        <Divider />
+  const userListItems = users.map(user  =>  <UserListItem key={`usercard-${user.id}`} userInfo={user}  isSelected ={ user.id ===chatUserId}  onClickProvider ={handlerUserClick} />)
+  return(
+      
+      <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+          paper: classes.drawerPaper,
+          }}
+          anchor="left"
+      >
+      <div className={classes.toolbar} />
+      <Divider />
+      <List>
+          {userListItems}
+      </List>
+      <Divider />
 
-    </Drawer>   
-    ) 
+  </Drawer>   
+  ) 
 
 
 }

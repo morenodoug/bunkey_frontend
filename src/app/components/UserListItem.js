@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
 export default function  UserListItem(props) {
 
     const classes = useStyles();
-    const {userInfo} = props
+    const {userInfo, isSelected} = props
     const {onClickProvider} = props
   
     return (
         <>
-        <ListItem>
-          <ListItemText primary={userInfo.name} secondary={userInfo.email}  onClick={ (e) => onClickProvider(userInfo.name)} />
+        <ListItem selected={isSelected}>
+          <ListItemText primary={userInfo.name} secondary={userInfo.email}  onClick={ (e) => onClickProvider(userInfo.id)} />
         </ListItem>
         <Divider variant="inset" component="li" />
         </>
