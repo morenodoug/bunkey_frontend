@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect ,useState} from 'react'
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,6 +11,8 @@ import {getMessagesByUserId, getChatUser} from "../../features/chat/chatSlice"
 import MessageCard from '../components/MessageCard';
 import {getUserProfileSelector, getProfile, setProfile} from '../../features/profile/profileSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
+import io from "socket.io-client";
+import {socketUrl} from "../utils/api"
 
 import {
   Link,
@@ -52,7 +54,9 @@ export default function MessageApp(props){
     const classes = useStyles();
 
     let history = useHistory();
-    let location = useLocation();        
+    let location = useLocation();    
+    const [socket, setSocket] = useState(null)   
+    const [socketConnected, setSocketConnected] = useState(false) 
     const chatUserId = useSelector(getChatUser)
     const messages = useSelector(getMessagesByUserId(chatUserId))
     const userProfile = useSelector( getUserProfileSelector)
@@ -70,6 +74,25 @@ export default function MessageApp(props){
         history.replace(from);        
       } )
     }, [])
+
+    useEffect(() => {
+      setSocket(io(socketUrl))      
+    }, [])
+
+    useEffect(() =>{
+      if( !socket) return;
+      socket.on('connect', () => {
+        setSocketConnected(socket.connected);
+      
+      });
+      socket.on('disconnect', () => {
+        setSocketConnected(socket.connected);
+      });
+   
+
+    }, [socket])
+
+   const handleSendMssg =() => socket.emit("conversation-message", {mssg:"holi"})
 
 
     return(
@@ -96,7 +119,7 @@ export default function MessageApp(props){
               />
             </Grid>
             <Grid item >
-              <Button>Enviar</Button>
+              <Button    onClick ={ (e) => { handleSendMssg()} }>Enviar</Button>
             </Grid>        
         </Grid>
 
