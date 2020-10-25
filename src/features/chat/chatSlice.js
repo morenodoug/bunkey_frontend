@@ -9,11 +9,12 @@ const users =[
     email: "morenodoug@gmail.com",
     messages:[
       {
+        id:"1",
         userId: "2",
         message:"Hola como estas",
         
       },
-      {
+      { id:"2",
         userId: "2",
         message:"bien vale ",
         
@@ -91,3 +92,19 @@ export const {setChatBoxUser} = chatSlice.actions
 
 export const getUsersSelector = (state) => state.chat.users
 export const getChatUser = state => state.chat.messageBox.userId
+export const getUserMessages = (state) =>{ 
+  
+  state.chat.users.forEach((user) =>{
+    if(user.id == state.chat.messageBox.userId ){
+      return user.messages
+    }
+  })
+  return []
+}
+
+export const getMessagesByUserId = userId => state => {
+  const userFound = state.chat.users.find( (user) => user.id == userId)
+  if(userFound)
+    return userFound.messages
+  return []
+}
