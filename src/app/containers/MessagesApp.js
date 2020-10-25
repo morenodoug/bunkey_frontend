@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+
 import TextField from "@material-ui/core/TextField"
 import ContactsSideBar from "../components/ContactsSideBar"
 import { Button , Divider} from '@material-ui/core';
 import {drawerWidth} from "../utils/UiConstants"
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import {getMessagesByUserId, getChatUser} from "../../features/chat/chatSlice"
 import MessageCard from '../components/MessageCard';
+import {getUserProfileSelector, getProfile, setProfile} from '../../features/profile/profileSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-//const drawerWidth = 300;
-
+import {
+  Link,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
@@ -43,11 +48,30 @@ const useStyles = makeStyles((theme) => ({
     }    
   }));
 export default function MessageApp(props){
+    const dispatch = useDispatch()
     const classes = useStyles();
+
+    let history = useHistory();
+    let location = useLocation();        
     const chatUserId = useSelector(getChatUser)
     const messages = useSelector(getMessagesByUserId(chatUserId))
-    
-    const messagesCards = messages.map(message  => <MessageCard  message ={message.message}  key={`message-${message.id}`} />)
+    const userProfile = useSelector( getUserProfileSelector)
+    const messagesCards = messages.map(message  => <MessageCard  message ={message.message}  isMyMessage={ userProfile.id === message.userId} key={`message-${message.id}`}    />)
+
+
+    useEffect(() => {
+      dispatch(getProfile(null))
+      .then(unwrapResult)
+      .then((data) =>{
+
+      }).catch(err =>{
+        console.error(err)
+        let { from } = location.state || { from: { pathname: "/" } };
+        history.replace(from);        
+      } )
+    }, [])
+
+
     return(
     <div className={classes.root}>
 
@@ -55,11 +79,9 @@ export default function MessageApp(props){
       
       <div className={classes.content}>
         <div className={classes.chat}>
-
           <Grid container direction="column" spacing={3}>
             {messagesCards}
           </Grid>
-        
         </div>
         <Divider  />
         <Grid alignItems="baseline" justify="space-evenly"  container>
@@ -78,8 +100,6 @@ export default function MessageApp(props){
             </Grid>        
         </Grid>
 
-
- 
       </div>
 
 

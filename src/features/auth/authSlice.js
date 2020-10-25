@@ -24,7 +24,7 @@ export const  signIn = createAsyncThunk("signIn",
         if(error.response){
           return thunkAPI.rejectWithValue (error.response)
         }
-        return error
+        throw error
 
       }    
 
@@ -41,7 +41,7 @@ export const  signUp = createAsyncThunk("signUp",
         if(error.response){
           return thunkAPI.rejectWithValue (error.response)
         }
-        return error
+        throw  error
 
       }    
 

@@ -26,9 +26,9 @@ function App() {
             <SignUpForm/>
           </CenterFormContainer>
         </Route>
-        <Route exact path="/">
+        <PrivateRoute exact path="/">
           <MessagesApp/>
-        </Route>
+        </PrivateRoute>
         <Route path="*">
             <Redirect to="/"/>
         </Route>        

@@ -46,6 +46,7 @@ export default function SignInForm(props){
       dispatch(signIn({email, password}))
       .then(unwrapResult)
       .then(originalPromiseResult => {
+        console.log("asdasd que es")
         let { from } = location.state || { from: { pathname: "/" } };
         history.replace(from);
       })

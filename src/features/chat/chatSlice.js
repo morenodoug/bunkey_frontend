@@ -10,16 +10,17 @@ const users =[
     messages:[
       {
         id:"1",
-        userId: "2",
+        userId: 55555,
         message:"Hola como estas",
         
       },
       { id:"2",
-        userId: "2",
+        userId: 2,
         message:"bien vale ",
         
       }      
     ]
+    
   },
 
   {
