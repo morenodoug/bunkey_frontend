@@ -57,17 +57,20 @@ export default function MessageApp(props){
     let location = useLocation();    
     const [socket, setSocket] = useState(null)   
     const [socketConnected, setSocketConnected] = useState(false) 
+    const [messageToSend, setMessageToSend] = useState("")
+
     const chatUserId = useSelector(getChatUser)
+    console.log(`chat suer id  ${chatUserId}`)
     const messages = useSelector(getMessagesByUserId(chatUserId))
     const userProfile = useSelector( getUserProfileSelector)
-    const messagesCards = messages.map(message  => <MessageCard  message ={message.message}  isMyMessage={ userProfile.id === message.userId} key={`message-${message.id}`}    />)
 
 
     useEffect(() => {
       dispatch(getProfile(null))
       .then(unwrapResult)
       .then((data) =>{
-
+        console.log(data)
+        setSocket(io(socketUrl,{ query: `userId=${data._id}` }))   
       }).catch(err =>{
         console.error(err)
         let { from } = location.state || { from: { pathname: "/" } };
@@ -76,7 +79,7 @@ export default function MessageApp(props){
     }, [])
 
     useEffect(() => {
-      setSocket(io(socketUrl))      
+         
     }, [])
 
     useEffect(() =>{
@@ -92,8 +95,21 @@ export default function MessageApp(props){
 
     }, [socket])
 
-   const handleSendMssg =() => socket.emit("conversation-message", {mssg:"holi"})
 
+    const handleSendMssg =() =>{
+
+      socket.emit("conversation-message",{
+        message:messageToSend.trim(),
+        to:chatUserId,
+        from:userProfile.id
+      })
+      setMessageToSend("")
+    }
+
+    const handleOnChangeMessageToSend = (e) =>  setMessageToSend(e.target.value)
+    
+    const messagesCards = messages.map(message  => <MessageCard  message ={message.message}  isMyMessage={ userProfile.id === message.userId} key={`message-${message.id}`}    />)
+    const  sendMessageButtonDisabled = messageToSend == "" || (chatUserId == undefined || chatUserId == null || chatUserId =="")
 
     return(
     <div className={classes.root}>
@@ -110,6 +126,8 @@ export default function MessageApp(props){
         <Grid alignItems="baseline" justify="space-evenly"  container>
             <Grid item sm={8}>
               <TextField
+                value={messageToSend}
+                onChange={handleOnChangeMessageToSend}
                 placeholder="nuevo Mensaje"
                 fullWidth
                 margin="normal"
@@ -119,7 +137,7 @@ export default function MessageApp(props){
               />
             </Grid>
             <Grid item >
-              <Button    onClick ={ (e) => { handleSendMssg()} }>Enviar</Button>
+              <Button  disabled={sendMessageButtonDisabled}   onClick ={ (e) => { handleSendMssg()} }>Enviar</Button>
             </Grid>        
         </Grid>
 

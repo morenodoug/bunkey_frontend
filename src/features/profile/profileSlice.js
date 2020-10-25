@@ -16,9 +16,9 @@ export const  getProfile = createAsyncThunk( "getProfile" ,
 })
 
 const initialState ={ 
-    id:55555,
-    email:"morenodoug@gmail.com",
-    name:"douglas"
+    id:"",
+    email:"",
+    name:""
 
 }
 
