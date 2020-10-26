@@ -96,6 +96,32 @@ export  const chatSlice = createSlice({
         currentState.messageBox.message =""
         currentState.messageBox.status = IDLE_STATUS
 
+      },
+      addReceivedMessageToConversation: (currentState, action) =>{
+        const userConversationIndex = currentState.users.findIndex( user => user.id === action.payload.userId)
+        if(userConversationIndex >=0){
+          const newMessage ={
+            userId: action.payload.userId,
+            message:action.payload.message,
+            id:""
+          }
+          currentState.users[userConversationIndex].messages.push(newMessage)
+          
+        }
+
+      },
+      addMyOwnMessageToConversation: (currentState, action) =>{
+
+        const userConversationIndex = currentState.users.findIndex( user => user.id === action.payload.to)
+        if(userConversationIndex >=0){
+          const newMessage ={
+            userId: action.payload.from,
+            message:action.payload.message,
+            id:""
+          }
+          currentState.users[userConversationIndex].messages.push(newMessage)
+          
+        }        
       }
     
   },
@@ -128,6 +154,7 @@ export  const chatSlice = createSlice({
 export default chatSlice.reducer
 
 export const {setChatBoxUser} = chatSlice.actions
+export const {addReceivedMessageToConversation,addMyOwnMessageToConversation} = chatSlice.actions
 
 export const getUsersSelector = (state) => state.chat.users
 export const getChatUser = state => state.chat.messageBox.userId

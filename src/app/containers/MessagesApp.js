@@ -7,7 +7,7 @@ import ContactsSideBar from "../components/ContactsSideBar"
 import { Button , Divider} from '@material-ui/core';
 import {drawerWidth} from "../utils/UiConstants"
 import {useSelector, useDispatch} from "react-redux"
-import {getMessagesByUserId, getChatUser} from "../../features/chat/chatSlice"
+import {getMessagesByUserId, getChatUser , addReceivedMessageToConversation,addMyOwnMessageToConversation} from "../../features/chat/chatSlice"
 import MessageCard from '../components/MessageCard';
 import {getUserProfileSelector, getProfile, setProfile} from '../../features/profile/profileSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -60,7 +60,6 @@ export default function MessageApp(props){
     const [messageToSend, setMessageToSend] = useState("")
 
     const chatUserId = useSelector(getChatUser)
-    console.log(`chat suer id  ${chatUserId}`)
     const messages = useSelector(getMessagesByUserId(chatUserId))
     const userProfile = useSelector( getUserProfileSelector)
 
@@ -69,7 +68,7 @@ export default function MessageApp(props){
       dispatch(getProfile(null))
       .then(unwrapResult)
       .then((data) =>{
-        console.log(data)
+   
         setSocket(io(socketUrl,{ query: `userId=${data._id}` }))   
       }).catch(err =>{
         console.error(err)
@@ -91,18 +90,25 @@ export default function MessageApp(props){
       socket.on('disconnect', () => {
         setSocketConnected(socket.connected);
       });
+
+      socket.on("notification" , (mssg) =>{
+        console.log(mssg)
+        dispatch(addReceivedMessageToConversation(mssg))
+      })
    
 
     }, [socket])
 
 
     const handleSendMssg =() =>{
-
-      socket.emit("conversation-message",{
+      const newMessage={
         message:messageToSend.trim(),
         to:chatUserId,
         from:userProfile.id
-      })
+      }
+      socket.emit("conversation-message",newMessage)
+      console.log("enviandp")
+      dispatch(addMyOwnMessageToConversation(newMessage))
       setMessageToSend("")
     }
 
