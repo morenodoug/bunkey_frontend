@@ -134,7 +134,7 @@ export  const chatSlice = createSlice({
     [getChatUserList.fulfilled] : (state, action) =>{
       state.status =FULFILLED_STATUS
       const users = action.payload.users.map( user => {return {
-        id:user._id, 
+        id:user.id, 
         email:user.email, 
         name:user.nombre,
         messages:[]
