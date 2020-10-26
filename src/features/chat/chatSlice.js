@@ -96,6 +96,12 @@ export  const chatSlice = createSlice({
         currentState.messageBox.message =""
         currentState.messageBox.status = IDLE_STATUS
 
+        const userConversationIndex = currentState.users.findIndex( user => user.id === action.payload)
+        if(userConversationIndex >=0){
+
+          currentState.users[userConversationIndex].hasNotification= false
+        }        
+
       },
       addReceivedMessageToConversation: (currentState, action) =>{
         const userConversationIndex = currentState.users.findIndex( user => user.id === action.payload.userId)
@@ -106,7 +112,7 @@ export  const chatSlice = createSlice({
             id:""
           }
           currentState.users[userConversationIndex].messages.push(newMessage)
-          
+          currentState.users[userConversationIndex].hasNotification= true
         }
 
       },

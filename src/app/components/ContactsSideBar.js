@@ -64,7 +64,7 @@ export default  function  ContactsSideBar( props ) {
   }, [])
   const  handlerUserClick = (userId) =>{ dispatch(setChatBoxUser(userId)) }
 
-  const userListItems = users.map(user  =>  <UserListItem key={`usercard-${user.id}`} userInfo={user}  isSelected ={ user.id ===chatUserId}  onClickProvider ={handlerUserClick} />)
+  const userListItems = users.map(user  =>  <UserListItem key={`usercard-${user.id}`} userInfo={user}  isSelected ={ user.id ===chatUserId}  hasNotification={user.hasNotification} onClickProvider ={handlerUserClick} />)
   return(
       
       <Drawer
