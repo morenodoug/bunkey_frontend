@@ -15,7 +15,6 @@ import {useDispatch} from "react-redux"
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import {
-  Link,
   useHistory,
   useLocation
 } from "react-router-dom";

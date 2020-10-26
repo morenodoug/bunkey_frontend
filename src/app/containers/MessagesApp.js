@@ -15,7 +15,7 @@ import io from "socket.io-client";
 import {socketUrl} from "../utils/api"
 
 import {
-  Link,
+
   useHistory,
   useLocation
 } from "react-router-dom";
